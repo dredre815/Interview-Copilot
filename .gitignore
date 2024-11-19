@@ -59,3 +59,6 @@ Thumbs.db
 
 # Yarn Integrity file
 .yarn-integrity
+
+# Deploy script
+deploy.sh
