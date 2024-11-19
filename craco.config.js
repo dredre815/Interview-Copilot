@@ -4,7 +4,7 @@ module.exports = {
   webpack: {
     configure: {
       output: {
-        publicPath: '/Interview-Copilot/',
+        publicPath: './',
       },
       resolve: {
         fallback: {
