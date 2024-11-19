@@ -4,18 +4,16 @@
   display: flex;
   flex-direction: column;
   background: var(--background);
+  overflow: hidden;
 }
 
 .main-content {
-  flex: 1;
-  padding: var(--space-4);
-  max-width: var(--max-width);
-  margin: 0 auto;
-  width: 100%;
   display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-4);
-  grid-template-columns: repeat(2, 1fr);
   height: calc(100vh - var(--header-height));
+  padding: var(--space-4);
+  overflow: hidden;
 }
 
 /* Navigation */
@@ -90,17 +88,17 @@
 
 /* Panels */
 .panel {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
   border: 1px solid var(--border);
-  transition: transform var(--transition-bounce), box-shadow var(--transition);
   backdrop-filter: blur(8px);
   background: rgba(var(--surface-rgb), 0.8);
+  position: relative;
+  overflow: hidden;
 }
 
 .panel:hover {
@@ -120,8 +118,17 @@
   font-size: 1.25rem;
 }
 
-/* Transcription Panel */
+/* Transcription Panel Layout */
+.transcription-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+/* Transcription Controls */
 .transcription-controls {
+  flex-shrink: 0; /* prevent the control bar from being compressed. */
   display: flex;
   gap: var(--space-2);
   padding: var(--space-4);
@@ -129,6 +136,45 @@
   background: var(--surface);
 }
 
+/* Transcription Content */
+.transcription-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+  padding-bottom: calc(var(--space-4) * 2);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  min-height: 0;
+}
+
+/* Add a pseudo-element to provide additional bottom space */
+.transcription-content::after {
+  content: '';
+  display: block;
+  height: var(--space-4);
+  width: 100%;
+}
+
+/* Optimize scrollbar styles */
+.transcription-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.transcription-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.transcription-content::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 4px;
+}
+
+.transcription-content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary);
+}
+
+/* Record Button */
 .record-button {
   display: flex;
   align-items: center;
@@ -151,53 +197,49 @@
 .record-button.recording {
   background: var(--error);
   animation: pulse 2s infinite;
-  box-shadow: 0 0 0 rgba(239, 68, 68, 0.4);
-  animation: pulse 2s infinite;
 }
 
-.transcription-content {
-  flex: 1;
-  padding: var(--space-4);
-  overflow-y: auto;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  background: var(--background);
-}
-
-/* Chat Panel */
-.chat-panel {
+/* Ensure each panel can scroll independently */
+.panel {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: var(--background);
+  overflow: hidden; /* Prevent content from affecting outside layout */
 }
 
-/* Messages Container */
+.transcription-content,
 .chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
+  flex: 1; /* Take remaining space in the panel */
+  overflow-y: auto; /* Enable scrolling for long content */
+  padding: var(--space-4); /* Keep consistent padding */
+  background: var(--background); /* Match overall theme */
+}
+
+.chat-input,
+.transcription-controls {
+  flex-shrink: 0; /* Prevent shrinking of the controls area */
+  background: var(--surface);
+  border-top: 1px solid var(--border);
 }
 
 /* Message Styles */
 .message {
-  padding: var(--space-6) max(var(--space-4), calc((100% - 48rem) / 2));
-  width: 100%;
-  max-width: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius);
+  background: var(--surface);
+  margin-bottom: var(--space-2);
+}
+
+.message:last-child {
+  margin-bottom: 0;
 }
 
 .message.user {
-  background: var(--surface);
+  background: var(--surface-hover);
 }
 
 .message.ai {
-  background: var(--background);
+  background: var(--surface);
 }
 
 .message-header {
@@ -243,21 +285,22 @@
 
 /* Input Area */
 .chat-input {
-  position: sticky;
+  position: absolute;
   bottom: 0;
-  background: var(--background);
-  padding: var(--space-4) max(var(--space-4), calc((100% - 48rem) / 2));
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  padding: var(--space-4);
   border-top: 1px solid var(--border);
+  z-index: 10;
 }
 
 .input-wrapper {
-  max-width: 48rem;
-  margin: 0 auto;
-  position: relative;
-  background: var(--surface);
+  background: var(--background);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: border-color 0.2s;
 }
 
 .chat-textarea {
@@ -524,4 +567,44 @@
 
 .save-button:hover {
   background: var(--primary-dark);
+}
+
+/* Chat Panel Specific */
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+  padding-bottom: calc(80px + var(--space-4));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Optimize scrollbar styles */
+.chat-messages::-webkit-scrollbar,
+.transcription-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track,
+.transcription-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb,
+.transcription-content::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover,
+.transcription-content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary);
 }
