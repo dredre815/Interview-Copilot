@@ -1,0 +1,67 @@
+:root {
+  /* Colors */
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --surface: #ffffff;
+  --surface-rgb: 255, 255, 255;
+  --surface-hover: #f9fafb;
+  --background: #f3f4f6;
+  --text: #111827;
+  --text-secondary: #4b5563;
+  --border: #e5e7eb;
+  --error: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  --shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  --shadow-lg: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-full: 9999px;
+  
+  /* Transition */
+  --transition: 0.2s ease-in-out;
+  
+  /* Max Width */
+  --max-width: 1920px;
+  
+  /* Header Height */
+  --header-height: 4rem;
+  
+  /* New variables */
+  --panel-spacing: clamp(1rem, 2vw, 2rem);
+  --content-width: min(100%, 1920px);
+  --transition-bounce: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+[data-theme='dark'] {
+  --primary: #818cf8;
+  --primary-light: #a5b4fc;
+  --primary-dark: #6366f1;
+  --surface: #1f2937;
+  --surface-rgb: 31, 41, 55;
+  --surface-hover: #374151;
+  --background: #111827;
+  --text: #f9fafb;
+  --text-secondary: #9ca3af;
+  --border: #374151;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow: 0 3px 6px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 20px rgba(0,0,0,0.5);
+} 

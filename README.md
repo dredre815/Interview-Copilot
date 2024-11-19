@@ -1,70 +1,102 @@
-# Getting Started with Create React App
+# Interview Copilot
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Interview Copilot is a browser-based application that enhances your interview experience by providing real-time transcription and AI assistance. It captures audio from your device and converts speech to text in real-time, then leverages ChatGPT to help formulate responses.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- 🎙️ Real-time speech-to-text transcription from any audio source
+- 🤖 AI-powered interview assistance using ChatGPT
+- 🌐 Pure web-based solution - no installation required
+- 💻 Cross-platform support (desktop, tablet, mobile)
+- 🔒 Serverless architecture with local storage for API keys
+- 🌓 Dark/Light theme support
+- 🎯 Optimized for online interview scenarios
 
-### `npm start`
+## Use Cases
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- 👥 Online job interviews
+- 🎓 Academic interviews
+- 💼 Business meetings
+- 🌍 Language assistance during conversations
+- 📝 Real-time meeting transcription
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Prerequisites
 
-### `npm test`
+Before you begin, ensure you have:
+- A modern web browser (Chrome, Firefox, Safari, or Edge)
+- Deepgram API key ([Get it here](https://console.deepgram.com/signup))
+- OpenAI API key ([Get it here](https://platform.openai.com/signup))
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Quick Start
 
-### `npm run build`
+1. Visit [Interview Copilot Web App](https://your-deployment-url.com)
+2. Open Settings and configure your API keys (stored locally)
+3. Grant microphone permissions when prompted
+4. Start your meeting or interview
+5. Click the microphone button to begin transcription
+6. Copy interesting portions to the AI chat for assistance
+7. Read AI-suggested responses
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Installation (For Developers)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clone the repository:
+```bash
+git clone https://github.com/dredre815/interview-copilot.git
+cd interview-copilot
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Install dependencies:
+```bash
+npm install
+```
 
-### `npm run eject`
+3. Start the development server:
+```bash
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Tech Stack
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- ⚛️ React.js for UI components
+- 🎤 Deepgram API for real-time speech-to-text
+- 🧠 OpenAI GPT-4o for AI responses
+- 🔌 WebSocket for real-time communication
+- 🎨 CSS3 with custom theming
+- 📱 Responsive design principles
+- 🔒 Local Storage API for secure key management
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Privacy & Security
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- All API keys are stored locally in your browser
+- No server-side storage of sensitive information
+- Direct communication with API providers
+- No data persistence beyond your browser session
 
-## Learn More
+## Contributing
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
 
-### Code Splitting
+This project is licensed under the [Apache License 2.0](LICENSE)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Author
 
-### Analyzing the Bundle Size
+**Zijun (Marshall) Zhang**
+- Personal website: [zijun2002.com](https://www.zijun2002.com)
+- Email: [zijuzhang1@student.unimelb.edu.au](mailto:zijuzhang1@student.unimelb.edu.au)
+- GitHub: [@dredre815](https://github.com/dredre815)
+- Twitter: [@Romanticism_02](https://twitter.com/Romanticism_02)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Acknowledgments
 
-### Making a Progressive Web App
+- [Deepgram](https://deepgram.com/) for their powerful speech-to-text API
+- [OpenAI](https://openai.com/) for ChatGPT API
+- [Material Icons](https://fonts.google.com/icons) for UI icons
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Support
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+If you encounter any issues or have questions, please:
+1. Check the [Issues](https://github.com/dredre815/interview-copilot/issues) page
+2. Create a new issue if your problem isn't already listed
+3. Contact the author via email for direct support
