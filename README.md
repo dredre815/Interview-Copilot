@@ -29,7 +29,7 @@ Before you begin, ensure you have:
 
 ## Quick Start
 
-1. Visit [Interview Copilot Web App](https://your-deployment-url.com)
+1. Visit [Interview Copilot Web App](https://dredre815.github.io/Interview-Copilot)
 2. Open Settings and configure your API keys (stored locally)
 3. Grant microphone permissions when prompted
 4. Start your meeting or interview
@@ -41,7 +41,7 @@ Before you begin, ensure you have:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/dredre815/interview-copilot.git
+git clone https://github.com/dredre815/Interview-Copilot.git
 cd interview-copilot
 ```
 

@@ -3,6 +3,9 @@ const webpack = require('webpack');
 module.exports = {
   webpack: {
     configure: {
+      output: {
+        publicPath: '/interview-copilot/',
+      },
       resolve: {
         fallback: {
           crypto: require.resolve('crypto-browserify'),
