@@ -4,6 +4,7 @@ import DeviceSelector from "./DeviceSelector";
 
 const Transcriber = ({ onBeforeStart, onSendToChat }) => {
   const [transcription, setTranscription] = useState("");
+  const [interimResult, setInterimResult] = useState("");
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [error, setError] = useState("");
   const [showDeviceSelector, setShowDeviceSelector] = useState(false);
@@ -42,7 +43,14 @@ const Transcriber = ({ onBeforeStart, onSendToChat }) => {
       socketRef.current = await startTranscription(
         deepgramKey,
         stream,
-        (text) => setTranscription(prev => prev + " " + text)
+        (text, isInterim) => {
+          if (isInterim) {
+            setInterimResult(text);
+          } else {
+            setTranscription(prev => prev + " " + text);
+            setInterimResult(""); // 清除中间结果
+          }
+        }
       );
     } catch (error) {
       console.error("Error starting transcription:", error);
@@ -129,7 +137,13 @@ const Transcriber = ({ onBeforeStart, onSendToChat }) => {
         ref={transcriptionRef}
         onMouseUp={handleTextSelection}
       >
-        {transcription || 'Transcription will appear here...'}
+        {transcription}
+        {interimResult && (
+          <div className="interim-result">
+            {interimResult}
+          </div>
+        )}
+        {!transcription && !interimResult && 'Transcription will appear here...'}
       </div>
 
       {error && (

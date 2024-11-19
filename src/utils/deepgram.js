@@ -393,15 +393,16 @@ export const startTranscription = async (apiKey, audioStream, onTranscription) =
 
     const buffer = {
       chunks: [],
-      processingTimer: null
+      processingTimer: null,
+      lastInterimResult: ''
     };
 
-    const BUFFER_INTERVAL = 3000;
+    const BUFFER_INTERVAL = 1000; 
 
     socket.onopen = () => {
       console.log('Connection opened');
       
-      // use more compatible config
+      // Optimize configuration for higher real-time performance
       const config = {
         type: 'Configure',
         encoding: 'linear16',
@@ -410,30 +411,27 @@ export const startTranscription = async (apiKey, audioStream, onTranscription) =
         punctuate: true,
         language: 'en',
         model: 'general',
-        interim_results: false
+        interim_results: true,
+        endpointing: true,
+        vad_turnoff: 500
       };
       
-      console.log('Sending config:', config);
       socket.send(JSON.stringify(config));
       
       try {
         const mediaRecorder = new MediaRecorder(audioStream, {
-          mimeType: 'audio/webm;codecs=opus'
+          mimeType: 'audio/webm;codecs=opus',
+          audioBitsPerSecond: 128000
         });
         
+        // 减少时间片以提高实时性
         mediaRecorder.ondataavailable = (event) => {
           if (event.data.size > 0 && socket.readyState === WebSocket.OPEN) {
             socket.send(event.data);
-            console.log('Audio data sent, size:', event.data.size);
           }
         };
 
         mediaRecorder.start(250);
-
-        // add error handling
-        mediaRecorder.onerror = (error) => {
-          console.error('MediaRecorder error:', error);
-        };
 
         return () => {
           try {
@@ -453,11 +451,20 @@ export const startTranscription = async (apiKey, audioStream, onTranscription) =
         const received = JSON.parse(message.data);
         const transcript = received.channel?.alternatives?.[0];
         
-        if (transcript?.transcript) {
-          const text = transcript.transcript.trim();
-          if (text) {
-            buffer.chunks.push(text);
-            scheduleProcessing(buffer, onTranscription);
+        if (transcript) {
+          if (received.is_final) {
+            const finalText = transcript.transcript.trim();
+            if (finalText) {
+              buffer.chunks.push(finalText);
+              scheduleProcessing(buffer, onTranscription);
+            }
+            buffer.lastInterimResult = '';
+          } else {
+            const interimText = transcript.transcript.trim();
+            if (interimText && interimText !== buffer.lastInterimResult) {
+              onTranscription(interimText, true);
+              buffer.lastInterimResult = interimText;
+            }
           }
         }
       } catch (error) {
@@ -477,7 +484,7 @@ export const startTranscription = async (apiKey, audioStream, onTranscription) =
           
           const processedText = processTranscription(textToProcess);
           if (processedText.trim()) {
-            callback(processedText);
+            callback(processedText, false);
           }
         }
       }, BUFFER_INTERVAL);
