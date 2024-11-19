@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { askChatGPT } from "../utils/chatgpt";
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const ChatGPTInterface = () => {
   const [messages, setMessages] = useState([]);
@@ -46,18 +49,55 @@ const ChatGPTInterface = () => {
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.type}`}>
             <div className="message-header">
-              <span>{message.type === 'ai' ? '🤖 AI' : '👤 You'}</span>
-              <div className="message-actions">
-                <button className="icon-button" onClick={() => navigator.clipboard.writeText(message.content)}>
-                  <span className="material-icons">content_copy</span>
-                </button>
-              </div>
+              {message.type === 'ai' ? (
+                <>
+                  <span className="material-icons">smart_toy</span>
+                  Assistant
+                </>
+              ) : (
+                <>
+                  <span className="material-icons">person</span>
+                  You
+                </>
+              )}
             </div>
-            <div className="message-content">{message.content}</div>
+            <div className="message-content">
+              {message.type === 'ai' ? (
+                <ReactMarkdown
+                  components={{
+                    code({node, inline, className, children, ...props}) {
+                      const match = /language-(\w+)/.exec(className || '');
+                      return !inline && match ? (
+                        <SyntaxHighlighter
+                          style={oneDark}
+                          language={match[1]}
+                          PreTag="div"
+                          {...props}
+                        >
+                          {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                      ) : (
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      )
+                    }
+                  }}
+                >
+                  {message.content}
+                </ReactMarkdown>
+              ) : (
+                message.content
+              )}
+            </div>
           </div>
         ))}
         {isLoading && (
-          <div className="message ai loading">
+          <div className="message ai">
+            <div className="message-header">
+              <span className="material-icons">smart_toy</span>
+              Assistant
+            </div>
             <div className="typing-indicator">
               <span></span>
               <span></span>
@@ -75,14 +115,22 @@ const ChatGPTInterface = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Type your message or paste transcription here..."
+            placeholder="Message ChatGPT..."
+            rows={1}
+            onInput={(e) => {
+              e.target.style.height = 'auto';
+              e.target.style.height = Math.min(e.target.scrollHeight, 200) + 'px';
+            }}
           />
           <button 
             className="send-button"
             onClick={handleSubmit}
             disabled={isLoading || !input.trim()}
+            title="Send message"
           >
-            <span className="material-icons">send</span>
+            <span className="material-icons">
+              {isLoading ? 'hourglass_empty' : 'send'}
+            </span>
           </button>
         </div>
       </div>

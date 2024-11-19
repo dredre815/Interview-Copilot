@@ -7,7 +7,6 @@ const Settings = ({ onClose }) => {
   const [chatGPTKey, setChatGPTKey] = useState(
     localStorage.getItem("chatGPTKey") || ""
   );
-  const [showKeys, setShowKeys] = useState(false);
 
   const saveKeys = () => {
     localStorage.setItem("deepgramKey", deepgramKey);
@@ -17,7 +16,7 @@ const Settings = ({ onClose }) => {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content settings-modal" onClick={e => e.stopPropagation()}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <div className="modal-title">
             <span className="material-icons">settings</span>
@@ -53,20 +52,12 @@ const Settings = ({ onClose }) => {
             </div>
             <div className="input-group">
               <input
-                type={showKeys ? "text" : "password"}
+                type="password"
                 value={deepgramKey}
                 onChange={(e) => setDeepgramKey(e.target.value)}
                 placeholder="Enter your Deepgram API key"
+                autoComplete="off"
               />
-              <button 
-                className="icon-button"
-                onClick={() => setShowKeys(!showKeys)}
-                aria-label={showKeys ? "Hide API key" : "Show API key"}
-              >
-                <span className="material-icons">
-                  {showKeys ? 'visibility_off' : 'visibility'}
-                </span>
-              </button>
             </div>
           </div>
 
@@ -94,19 +85,21 @@ const Settings = ({ onClose }) => {
             </div>
             <div className="input-group">
               <input
-                type={showKeys ? "text" : "password"}
+                type="password"
                 value={chatGPTKey}
                 onChange={(e) => setChatGPTKey(e.target.value)}
                 placeholder="Enter your ChatGPT API key"
+                autoComplete="off"
               />
             </div>
           </div>
         </div>
 
         <div className="modal-footer">
-          <button className="button secondary" onClick={onClose}>Cancel</button>
-          <button className="button primary" onClick={saveKeys}>
-            <span className="material-icons">save</span>
+          <button className="cancel-button" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="save-button" onClick={saveKeys}>
             Save Keys
           </button>
         </div>
