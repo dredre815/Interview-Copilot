@@ -634,7 +634,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 9999;
   padding: var(--space-4);
   backdrop-filter: blur(4px);
 }
@@ -658,44 +658,67 @@
 .device-selector-header h2 {
   font-size: 1.5rem;
   margin: 0;
+  color: var(--text);
+}
+
+.device-info-section {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-hover);
+}
+
+.device-note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.note-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--primary);
+}
+
+.note-header h3 {
+  font-size: 1rem;
+  margin: 0;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.device-note ul {
+  margin: 0;
+  padding-left: var(--space-6);
+  list-style-type: none;
+}
+
+.device-note li {
+  position: relative;
+  margin-bottom: var(--space-2);
+  color: var(--text-secondary);
+}
+
+.device-note li::before {
+  content: "•";
+  position: absolute;
+  left: -1rem;
+  color: var(--primary);
 }
 
 .device-sections {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-6);
   padding: var(--space-6);
 }
 
-.device-section {
-  min-width: 0;
-}
-
 .device-section h3 {
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
   margin-bottom: var(--space-4);
-}
-
-.device-note {
-  background: var(--surface-hover);
-  border-radius: var(--radius);
-  padding: var(--space-4);
-  margin-bottom: var(--space-4);
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  border-left: 3px solid var(--primary);
-}
-
-.device-note ul {
-  margin-top: var(--space-2);
-  padding-left: var(--space-4);
-}
-
-.device-note li {
-  margin-bottom: var(--space-2);
 }
 
 .device-list {
@@ -713,8 +736,6 @@
   border-radius: var(--radius);
   background: var(--surface);
   transition: all 0.2s ease;
-  width: 100%;
-  text-align: left;
 }
 
 .device-option:hover {
@@ -727,35 +748,22 @@
   background: rgba(var(--primary-rgb), 0.1);
 }
 
-.device-icon {
-  color: var(--primary);
-  font-size: 1.5rem;
-  flex-shrink: 0;
+.loading-state,
+.error-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  text-align: center;
 }
 
-.device-info {
-  flex: 1;
-  min-width: 0;
+.loading-state .spinning {
+  animation: spin 1s linear infinite;
 }
 
-.device-label {
-  font-weight: 500;
-  color: var(--text);
-  margin-bottom: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.device-type {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.device-selected {
-  color: var(--primary);
-  font-size: 1.25rem;
-  flex-shrink: 0;
+@keyframes spin {
+  100% { transform: rotate(360deg); }
 }
 
 .device-selector-footer {

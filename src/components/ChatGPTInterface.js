@@ -1,14 +1,47 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import { askChatGPT } from "../utils/chatgpt";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-const ChatGPTInterface = () => {
+const ChatGPTInterface = forwardRef((props, ref) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    sendMessage: (text) => {
+      if (!text.trim()) return;
+      
+      // Set the input text
+      setInput(text);
+      
+      // Trigger the submit
+      handleSubmit(null, text);
+    }
+  }));
+
+  const handleSubmit = async (e, textOverride = null) => {
+    e?.preventDefault();
+    const text = textOverride || input;
+    
+    if (!text.trim() || isLoading) return;
+
+    const newMessage = { type: 'user', content: text };
+    setMessages(prev => [...prev, newMessage]);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      const response = await askChatGPT(localStorage.getItem("chatGPTKey"), text);
+      setMessages(prev => [...prev, { type: 'ai', content: response }]);
+    } catch (error) {
+      setMessages(prev => [...prev, { type: 'error', content: error.message }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -18,28 +51,10 @@ const ChatGPTInterface = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSubmit = async () => {
-    if (!input.trim() || isLoading) return;
-
-    const newMessage = { type: 'user', content: input };
-    setMessages(prev => [...prev, newMessage]);
-    setInput("");
-    setIsLoading(true);
-
-    try {
-      const response = await askChatGPT(localStorage.getItem("chatGPTKey"), input);
-      setMessages(prev => [...prev, { type: 'ai', content: response }]);
-    } catch (error) {
-      setMessages(prev => [...prev, { type: 'error', content: error.message }]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit();
+      props.sendMessage(input);
     }
   };
 
@@ -124,7 +139,7 @@ const ChatGPTInterface = () => {
           />
           <button 
             className="send-button"
-            onClick={handleSubmit}
+            onClick={props.sendMessage}
             disabled={isLoading || !input.trim()}
             title="Send message"
           >
@@ -136,6 +151,6 @@ const ChatGPTInterface = () => {
       </div>
     </div>
   );
-};
+});
 
 export default ChatGPTInterface;

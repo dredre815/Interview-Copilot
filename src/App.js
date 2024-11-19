@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Navigation from "./components/Navigation";
 import Transcriber from "./components/Transcriber";
 import ChatGPTInterface from "./components/ChatGPTInterface";
@@ -8,6 +8,7 @@ const App = () => {
   const [error, setError] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [theme, setTheme] = useState('light');
+  const sendToAssistant = useRef(null);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -30,6 +31,12 @@ const App = () => {
     return true;
   };
 
+  const handleSendToChat = (text) => {
+    if (sendToAssistant.current) {
+      sendToAssistant.current.sendMessage(text);
+    }
+  };
+
   return (
     <div className="app-wrapper">
       <Navigation 
@@ -46,7 +53,10 @@ const App = () => {
               Real-time Transcription
             </h2>
           </div>
-          <Transcriber onBeforeStart={checkApiKeys} />
+          <Transcriber 
+            onBeforeStart={checkApiKeys} 
+            onSendToChat={handleSendToChat} 
+          />
         </div>
         
         <div className="panel chat-panel">
@@ -56,7 +66,7 @@ const App = () => {
               AI Assistant
             </h2>
           </div>
-          <ChatGPTInterface />
+          <ChatGPTInterface ref={sendToAssistant} />
         </div>
       </main>
       

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { startTranscription, getAudioStream } from "../utils/deepgram";
 import DeviceSelector from "./DeviceSelector";
 
-const Transcriber = ({ onBeforeStart }) => {
+const Transcriber = ({ onBeforeStart, onSendToChat }) => {
   const [transcription, setTranscription] = useState("");
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [error, setError] = useState("");
@@ -74,7 +74,13 @@ const Transcriber = ({ onBeforeStart }) => {
   };
 
   const sendToChat = () => {
-    // 实现发送选中文本到聊天框的功能
+    if (selectedText && onSendToChat) {
+      onSendToChat(selectedText);
+      setSelectedText(''); // Clear selection after sending
+      
+      // Clear the window selection
+      window.getSelection()?.removeAllRanges();
+    }
   };
 
   return (
