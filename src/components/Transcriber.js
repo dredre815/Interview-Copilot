@@ -1,12 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
-import { startTranscription } from "../utils/deepgram";
+import { startTranscription, getAudioStream } from "../utils/deepgram";
+import DeviceSelector from "./DeviceSelector";
 
 const Transcriber = ({ onBeforeStart }) => {
   const [transcription, setTranscription] = useState("");
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [error, setError] = useState("");
+  const [showDeviceSelector, setShowDeviceSelector] = useState(false);
   const transcriptionRef = useRef(null);
   const socketRef = useRef(null);
+  const [selectedText, setSelectedText] = useState("");
+  const cleanupRef = useRef(null);
 
   useEffect(() => {
     if (transcriptionRef.current) {
@@ -18,21 +22,23 @@ const Transcriber = ({ onBeforeStart }) => {
     if (onBeforeStart && !onBeforeStart()) {
       return;
     }
+    setShowDeviceSelector(true);
+  };
 
+  const handleDeviceSelect = async (device) => {
     try {
       setError("");
+      setShowDeviceSelector(false);
+      
       const deepgramKey = localStorage.getItem("deepgramKey");
       if (!deepgramKey) {
         throw new Error("Deepgram API key not found");
       }
 
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: true,
-        video: false 
-      });
-      
+      const { stream, cleanup } = await getAudioStream(device);
       setIsTranscribing(true);
-      
+      cleanupRef.current = cleanup;
+
       socketRef.current = await startTranscription(
         deepgramKey,
         stream,
@@ -50,7 +56,25 @@ const Transcriber = ({ onBeforeStart }) => {
       socketRef.current.close();
       socketRef.current = null;
     }
+    
+    if (cleanupRef.current) {
+      cleanupRef.current();
+      cleanupRef.current = null;
+    }
+    
     setIsTranscribing(false);
+  };
+
+  const handleTextSelection = () => {
+    const selection = window.getSelection();
+    const selectedText = selection.toString();
+    if (selectedText) {
+      setSelectedText(selectedText);
+    }
+  };
+
+  const sendToChat = () => {
+    // 实现发送选中文本到聊天框的功能
   };
 
   return (
@@ -77,15 +101,28 @@ const Transcriber = ({ onBeforeStart }) => {
         
         <button 
           className="button secondary"
-          onClick={() => navigator.clipboard.writeText(transcription)}
+          onClick={() => navigator.clipboard.writeText(selectedText || transcription)}
           disabled={!transcription}
         >
           <span className="material-icons">content_copy</span>
-          Copy
+          Copy Selected
+        </button>
+        
+        <button 
+          className="button primary"
+          onClick={sendToChat}
+          disabled={!selectedText}
+        >
+          <span className="material-icons">send</span>
+          Send to Chat
         </button>
       </div>
 
-      <div className="transcription-content" ref={transcriptionRef}>
+      <div 
+        className="transcription-content" 
+        ref={transcriptionRef}
+        onMouseUp={handleTextSelection}
+      >
         {transcription || 'Transcription will appear here...'}
       </div>
 
@@ -94,6 +131,13 @@ const Transcriber = ({ onBeforeStart }) => {
           <span className="material-icons">error</span>
           {error}
         </div>
+      )}
+
+      {showDeviceSelector && (
+        <DeviceSelector
+          onSelect={handleDeviceSelect}
+          onCancel={() => setShowDeviceSelector(false)}
+        />
       )}
     </div>
   );

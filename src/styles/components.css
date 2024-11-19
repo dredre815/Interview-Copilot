@@ -141,19 +141,33 @@
   flex: 1;
   overflow-y: auto;
   padding: var(--space-4);
-  padding-bottom: calc(var(--space-4) * 2);
   font-size: 1.1rem;
-  line-height: 1.6;
+  line-height: 1.8;
   white-space: pre-wrap;
   min-height: 0;
+  user-select: text;
 }
 
-/* Add a pseudo-element to provide additional bottom space */
-.transcription-content::after {
-  content: '';
-  display: block;
-  height: var(--space-4);
-  width: 100%;
+/* 添加选中文本的样式 */
+.transcription-content::selection {
+  background: var(--primary-light);
+  color: white;
+}
+
+/* 添加段落样式 */
+.transcription-content p {
+  margin-bottom: var(--space-4);
+}
+
+/* 添加工具提示 */
+.transcription-tooltip {
+  position: absolute;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-2);
+  box-shadow: var(--shadow);
+  z-index: 100;
 }
 
 /* Optimize scrollbar styles */
@@ -607,4 +621,229 @@
 .chat-messages::-webkit-scrollbar-thumb:hover,
 .transcription-content::-webkit-scrollbar-thumb:hover {
   background-color: var(--text-secondary);
+}
+
+/* Device Selector Styles */
+.device-selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-4);
+  backdrop-filter: blur(4px);
+}
+
+.device-selector-modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: modalSlideIn 0.3s ease;
+}
+
+.device-selector-header {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.device-selector-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.device-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+  padding: var(--space-6);
+}
+
+.device-section {
+  min-width: 0;
+}
+
+.device-section h3 {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.device-note {
+  background: var(--surface-hover);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  border-left: 3px solid var(--primary);
+}
+
+.device-note ul {
+  margin-top: var(--space-2);
+  padding-left: var(--space-4);
+}
+
+.device-note li {
+  margin-bottom: var(--space-2);
+}
+
+.device-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.device-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.device-option:hover {
+  border-color: var(--primary);
+  background: var(--surface-hover);
+}
+
+.device-option.selected {
+  border-color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.1);
+}
+
+.device-icon {
+  color: var(--primary);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.device-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.device-label {
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.device-type {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.device-selected {
+  color: var(--primary);
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.device-selector-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.device-selector-footer button {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.device-selector-footer .button.secondary {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.device-selector-footer .button.secondary:hover {
+  background: var(--border);
+}
+
+.device-selector-footer .button.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.device-selector-footer .button.primary:hover {
+  background: var(--primary-dark);
+}
+
+.device-selector-footer .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error {
+  color: var(--error);
+  padding: var(--space-2);
+  margin-bottom: var(--space-3);
+  background: var(--error-light);
+  border-radius: var(--radius);
+}
+
+.loading {
+  text-align: center;
+  padding: var(--space-4);
+  color: var(--text-secondary);
+}
+
+.device-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+  background: var(--surface-alt);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.device-note .material-icons {
+  color: var(--primary);
+  font-size: 1.2rem;
+}
+
+.device-note ul {
+  margin-top: var(--space-2);
+  padding-left: var(--space-4);
+}
+
+.device-note li {
+  margin-bottom: var(--space-1);
 }
