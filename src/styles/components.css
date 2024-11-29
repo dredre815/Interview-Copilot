@@ -864,3 +864,97 @@
   background: var(--surface-hover);
   border-radius: var(--radius);
 }
+
+/* Responsive Design Improvements */
+@media (max-width: 768px) {
+  .main-content {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    height: auto;
+    padding: var(--space-2);
+    overflow-y: auto;
+  }
+
+  .nav-content {
+    padding: 0 var(--space-2);
+  }
+
+  .nav-brand h1 {
+    font-size: 1.25rem;
+  }
+
+  .brand-icon {
+    font-size: 1.75rem;
+  }
+
+  .panel {
+    min-height: 300px;
+    max-height: calc(100vh - var(--header-height) - var(--space-4) * 2);
+  }
+
+  .transcription-controls {
+    flex-wrap: wrap;
+    padding: var(--space-2);
+  }
+
+  .record-button {
+    width: 100%;
+    justify-content: center;
+    order: -1;
+    margin-bottom: var(--space-2);
+  }
+
+  .chat-input {
+    padding: var(--space-2);
+  }
+
+  .chat-textarea {
+    max-height: 100px;
+  }
+
+  .message {
+    padding: var(--space-3);
+  }
+
+  .nav-actions {
+    gap: var(--space-1);
+  }
+
+  .nav-button {
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .nav-button span:not(.material-icons) {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .panel-header {
+    padding: var(--space-2);
+  }
+
+  .panel-header h2 {
+    font-size: 1rem;
+  }
+
+  .transcription-content,
+  .chat-messages {
+    padding: var(--space-2);
+    font-size: 0.95rem;
+  }
+
+  .modal-content {
+    width: 95%;
+    margin: var(--space-2);
+    max-height: calc(100vh - var(--space-4));
+  }
+}
+
+/* Add smooth transitions for responsive changes */
+.main-content,
+.panel,
+.nav-content,
+.transcription-controls {
+  transition: all 0.3s ease;
+}
